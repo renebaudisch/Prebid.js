@@ -26,6 +26,11 @@ module.exports = {
       {
         test: /adaptermanager.js/,
         include: /(src)/,
+        loader: 'analyticsLoader'
+      },
+      {
+        test: /adaptermanager.js/,
+        include: /(src)/,
         loader: 'adapterLoader'
       }
     ]

@@ -32,6 +32,24 @@
     var pbjs = pbjs || {};
     pbjs.que = pbjs.que || [];
 
+    // Configure analytics providers
+    pbjs.que.push(function () {
+        pbjs.enableAnalytics([
+            {
+                provider: 'ga',
+                options: {
+                    enableDistribution: false
+                }
+            },
+            {
+                provider: 'gaOther',
+                options: {
+                    enableDistribution: false
+                }
+            }
+        ]);
+    });
+
     // Load the Prebid Javascript Library Async. We recommend loading it immediately after
     // the initAdserver() and setTimeout functions.
     (function() {
@@ -72,7 +90,7 @@
     pbjs.addAdUnits(adUnits);
 
     /*  Alias Bidders (existingBidderCode, newBidderCode)    <------ New Feature
-        aliased bidders will use the existing adapter and require the same params as the existing adapter. The only change is the bidderCode is updated. 
+        aliased bidders will use the existing adapter and require the same params as the existing adapter. The only change is the bidderCode is updated.
     */
     pbjs.aliasBidder('appnexus', 'brealtime')
 
@@ -95,12 +113,12 @@
                adUnitCodes: ['code1', 'code2']
             */
 
-            /* You can also make one off bid requests for the given `adUnits`. 
+            /* You can also make one off bid requests for the given `adUnits`.
                adUnits: [adUnit2, adUnit1]
-            */ 
+            */
 
             /* The bidsBackHandler will be executed either when all bids are
-               back, or when the timeout is reached. 
+               back, or when the timeout is reached.
                timeout: 1000
             */
     });
@@ -133,8 +151,8 @@
         });
 
         googletag.pubads().enableSingleRequest();
-        googletag.enableServices();   
-        
+        googletag.enableServices();
+
     });
 
 
@@ -167,18 +185,8 @@
    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
- 
+
     ga('create', 'XXXXXX', 'auto');
-    //Send data from prebid.js automatically 
-    pbjs.que.push(function() {
-        pbjs.enableAnalytics({
-            provider: 'ga',
-            options: {
-                global: 'ga', // <string> name of GA global. Default is 'ga'
-                enableDistribution: false, // <bool> enable/disable distribution. Recommend disable to save bandwidth/calls
-            }
-        });
-    });
 </script>
 
 </html>

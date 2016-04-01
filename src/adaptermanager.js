@@ -6,9 +6,11 @@ var CONSTANTS = require('./constants.json');
 var events = require('./events');
 import { BaseAdapter } from './adapters/baseAdapter';
 
-
 var _bidderRegistry = {};
 exports.bidderRegistry = _bidderRegistry;
+
+var _analyticsRegistry = {};
+exports.analyticsRegistry = _analyticsRegistry;
 
 exports.callBids = function (bidderArr) {
   for (var i = 0; i < bidderArr.length; i++) {
@@ -66,7 +68,7 @@ exports.aliasBidAdapter = function (bidderCode, alias) {
     } else {
       try {
         let newAdapter = null;
-        if(bidAdaptor instanceof BaseAdapter) {
+        if (bidAdaptor instanceof BaseAdapter) {
           //newAdapter = new bidAdaptor.constructor(alias);
           utils.logError(bidderCode + ' bidder does not currently support aliasing.', 'adaptermanager.aliasBidAdapter');
         } else {
@@ -83,9 +85,40 @@ exports.aliasBidAdapter = function (bidderCode, alias) {
   }
 };
 
+exports.registerAnalyticsAdapter = function ({ adapter, code }) {
+  if (adapter && code) {
+
+    if (typeof adapter.enableAnalytics === CONSTANTS.objectType_function) {
+      adapter.code = code;
+      _analyticsRegistry[code] = adapter;
+    } else {
+      utils.logError(`Prebid Error: Analytics adaptor error for analytics "${code}"
+        analytics adapter must implement an enableAnalytics() function`);
+    }
+  } else {
+    utils.logError('Prebid Error: analyticsAdapter or analyticsCode not specified');
+  }
+};
+
+exports.enableAnalytics = function (config) {
+  utils._each(config, adapterConfig => {
+    var adapter = _analyticsRegistry[adapterConfig.provider];
+    if (adapter) {
+      adapter.enableAnalytics(adapterConfig);
+    } else {
+      utils.logError(`Prebid Error: no analytics adapter found in registry for
+        ${adapterConfig.provider}.`);
+    }
+  });
+};
+
 /** INSERT ADAPTERS - DO NOT EDIT OR REMOVE */
-// here be adapters
+
 /** END INSERT ADAPTERS */
+
+/** INSERT ANALYTICS - DO NOT EDIT OR REMOVE */
+
+/** END INSERT ANALYTICS */
 
 //default bidder alias
 exports.aliasBidAdapter('appnexus', 'brealtime');

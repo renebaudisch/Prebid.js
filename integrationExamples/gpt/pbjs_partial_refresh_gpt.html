@@ -8,7 +8,7 @@
 
     var googletag = googletag || {};
     googletag.cmd = googletag.cmd || [];
-    
+
     /* pbjs.initAdserver will be called either when all bids are back, or
        when the timeout is reached.
     */
@@ -48,12 +48,12 @@
 
     	/* 1. Register bidder tag Ids
 
-        Registers the bidder tags for your ad units. Once the prebid.js 
-        library loads, it reads the pbjs.adUnits object and sends out 
-        bid requests. Find the complete reference on bidders at 
+        Registers the bidder tags for your ad units. Once the prebid.js
+        library loads, it reads the pbjs.adUnits object and sends out
+        bid requests. Find the complete reference on bidders at
         http://prebid.org/bidders.html.
 
-        code:  Your GPT slot’s ad unit path. If they don’t match, prebid.js 
+        code:  Your GPT slot’s ad unit path. If they don’t match, prebid.js
                would not be able to set targeting correctly
         sizes: All sizes your ad unit accepts. They should match with GPT.
 
@@ -68,7 +68,7 @@
                 params: {
                    placementId: 'TO ADD'
                 }
-            }, 
+            },
             // 1 ad unit can also be targeted by multiple bids from 1 bidder
            {
                 bidder: 'pubmatic',
@@ -106,13 +106,13 @@
                     zoneId: "1234",           //String - required
                     sizes: [15],                //Array[Number] - optional
                     userId: "12345",            //String - optional
-                    keywords: ["a","b","c"],    //Array[String] - optional       
+                    keywords: ["a","b","c"],    //Array[String] - optional
                     inventory: {                //Object - optional
-                        rating:"5-star", 
+                        rating:"5-star",
                         prodtype:"tech"
                     },
                     visitor: {                  //Object - optional
-                        ucat:"new", 
+                        ucat:"new",
                         search:"iphone"
                     }
                 }
@@ -129,7 +129,7 @@
                     slotId: 'TO ADD', // number
                     casaleUrl: 'TO ADD'
                 }
-            }]  
+            }]
     }];
 
     //add the adUnits
@@ -157,33 +157,33 @@
                adUnitCodes: ['code1', 'code2']
             */
 
-            /* You can also make one off bid requests for the given `adUnits`. 
+            /* You can also make one off bid requests for the given `adUnits`.
                adUnits: [adUnit2, adUnit1]
-            */ 
+            */
 
             /* The bidsBackHandler will be executed either when all bids are
-               back, or when the timeout is reached. 
+               back, or when the timeout is reached.
                timeout: 1000
             */
     })
 
-  
+
     /* 2. Configure Ad Server Targeting
 
-    The below section defines what key value targeting will be sent to GPT. 
-    For each bidder’s bid, Prebid.js will set the below 4 keys (hb_bidder, 
+    The below section defines what key value targeting will be sent to GPT.
+    For each bidder’s bid, Prebid.js will set the below 4 keys (hb_bidder,
     hb_adid, hb_pb, hb_size) with their corresponding values.
 
-    Bidders all have different recommended ad server line item targeting and 
-    creative setup. To remove the headache for you, Prebid.js has a default 
+    Bidders all have different recommended ad server line item targeting and
+    creative setup. To remove the headache for you, Prebid.js has a default
     recommended query string targeting setting for all bidders.
 
-    If you’d like to customize the key value pairs, you can overwrite the settings 
-    as the below example shows. Let your ad ops team know about the change, so they 
+    If you’d like to customize the key value pairs, you can overwrite the settings
+    as the below example shows. Let your ad ops team know about the change, so they
     can update the line item targeting accordingly.
 
     */
-    
+
         pbjs.bidderSettings = {
             standard: {
                     adserverTargeting: [{
@@ -207,14 +207,14 @@
 
 });
 
-  
+
 </script>
 
 
 <script>
     var rightSlot;
     var topSlot;
-    
+
     googletag.cmd.push(function() {
 
         rightSlot = googletag.defineSlot('/9968336/header-bid-tag-0', [[300, 250], [300, 600]], 'div-gpt-ad-12345678-0').addService(googletag.pubads());
@@ -236,8 +236,8 @@
         });
 
         googletag.pubads().enableSingleRequest();
-        googletag.enableServices();   
-        
+        googletag.enableServices();
+
     });
 
 
@@ -248,7 +248,7 @@
                 adUnitCodes: ['/9968336/header-bid-tag-0'],
                 bidsBackHandler: function() {
                     pbjs.setTargetingForGPTAsync(['/9968336/header-bid-tag-0']);
-                    googletag.pubads().refresh([rightSlot]); 
+                    googletag.pubads().refresh([rightSlot]);
                 }
             });
         });
@@ -261,7 +261,7 @@
                 adUnitCodes: ['/9968336/header-bid-tag1'],
                 bidsBackHandler: function() {
                     pbjs.setTargetingForGPTAsync(['/9968336/header-bid-tag1']);
-                    googletag.pubads().refresh([topSlot]); 
+                    googletag.pubads().refresh([topSlot]);
                 }
             });
         });

@@ -34,6 +34,24 @@
         var pbjs = pbjs || {};
         pbjs.que = pbjs.que || [];
 
+        // Configure analytics providers. Provider property should equal analytics adapter file name
+        pbjs.que.push(function () {
+            pbjs.enableAnalytics([
+                {
+                    provider: 'ga',
+                    options: {
+                        enableDistribution: false
+                    }
+                },
+                {
+                    provider: 'gaOther',
+                    options: {
+                        enableDistribution: false
+                    }
+                }
+            ]);
+        });
+
         // Load the Prebid Javascript Library Async. We recommend loading it immediately after
         // the initAdserver() and setTimeout functions.
         (function () {
@@ -132,6 +150,7 @@
                             bidder: 'brightcom',
                             params: {
                                 tagId: 16577 // Tag ID supplied by Brightcom - brightcom.com
+                            }
                         },
                         {
                             bidder: 'adequant',
@@ -214,7 +233,7 @@
                             bidder: 'adequant',
                             params: {
                                 publisher_id: 5000563,  // REQUIRED int or str publisher ID. To get one, register at https://control.adequant.com
-                                bidfloor: 0.01,         // OPTIONAL float bid floor in $ CPM
+                                bidfloor: 0.01         // OPTIONAL float bid floor in $ CPM
                             }
                         }
                     ]
@@ -334,27 +353,9 @@
     <script>
         googletag.cmd.push(function () {
 
-            var rightSlot = googletag.defineSlot('/9968336/header-bid-tag-0', [
-                [
-                    300,
-                    250
-                ],
-                [
-                    300,
-                    600
-                ]
-            ], 'div-gpt-ad-12345678-0').addService(googletag.pubads());
+            var rightSlot = googletag.defineSlot('/9968336/header-bid-tag-0', [[300, 250],[300, 600]], 'div-gpt-ad-12345678-0').addService(googletag.pubads());
 
-            var topSlot = googletag.defineSlot('/9968336/header-bid-tag1', [
-                [
-                    728,
-                    90
-                ],
-                [
-                    970,
-                    90
-                ]
-            ], 'div-gpt-ad-12345678-1').addService(googletag.pubads());
+            var topSlot = googletag.defineSlot('/9968336/header-bid-tag1', [[728, 90],[970, 90]], 'div-gpt-ad-12345678-1').addService(googletag.pubads());
 
             pbjs.que.push(function () {
                 /* Set query string targeting on all GPT ad units. The logic for deciding query strings is described in the section Configure AdServer Targeting. Note that this function has to be called after all ad units on page are defined.
@@ -418,16 +419,7 @@
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'XXXXXX', 'auto');
-    //Send data from prebid.js automatically 
-    pbjs.que.push(function () {
-        pbjs.enableAnalytics({
-            provider: 'ga',
-            options: {
-                global: 'ga', // <string> name of GA global. Default is 'ga'
-                enableDistribution: false, // <bool> enable/disable distribution. Recommend disable to save bandwidth/calls
-            }
-        });
-    });
+
 </script>
 
 </html>
