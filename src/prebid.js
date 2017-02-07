@@ -420,6 +420,48 @@ $$PREBID_GLOBAL$$.requestBids = function ({ bidsBackHandler, timeout, adUnits, a
   }
 };
 
+pbjs.startAuctionForAdUnit = function(requestObj) {
+  utils.logInfo('Invoking pbjs.startAuctionForAdUnit', arguments);
+  if (!requestObj || !requestObj.adSlot) {
+    utils.logInfo('No AdUnit passed, ignoring call');
+  } else {
+    var adSlot = requestObj.adSlot;
+    var bidsBackHandler = requestObj.bidsBackHandler;
+    var aktUnit = pbjs.getAdUnitByCode(pbjs.adUnits, 'code', adSlot);
+
+    if (typeof bidsBackHandler === objectType_function) {
+      bidmanager.addCallback(requestObj.adSlot, bidsBackHandler, 'adUnitBidsBack');
+    }
+
+    // from init(), modded
+    pb_placements = [aktUnit];
+
+    //Aggregrate prebidders by their codes
+    loadPreBidders();
+
+    //sort and call // default no sort
+    var pbArr = utils._map(pb_bidderMap, function(v) {
+      return v;
+    });
+
+    /// select only the mapping responding to adUnit
+    var reqArray = [];
+    for(var i=0; i < pbArr.length; i++) {
+      var aktBidRequest = pbjs.getAdUnitByCode(pbArr[i].bids, 'placementCode', adSlot);
+      reqArray.push({
+        bidderCode: pbArr[i].bidderCode,
+        bids: [aktBidRequest]
+      });
+    }
+    adaptermanager.callBids(reqArray);
+  }
+};
+
+pbjs.getAdUnitByCode = function(arr, key, value) {
+  for (var i=0; i < arr.length; i++) {
+    if (arr[i][key] === value) return arr[i];
+  }
+};
 /**
  *
  * Add adunit(s)

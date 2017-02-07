@@ -275,8 +275,8 @@ exports.externalCallbackReset = function () {
 
 function triggerAdUnitCallbacks(adUnitCode) {
   //todo : get bid responses and send in args
-  var singleAdUnitCode = [adUnitCode];
-  processCallbacks(externalCallbacks.byAdUnit, singleAdUnitCode);
+  var params = pbjs.getBidResponses(adUnitCode).bids;
+  processCallbacks(externalCallbackByAdUnitArr[adUnitCode], params);
 }
 
 function processCallbacks(callbackQueue, singleAdUnitCode) {
@@ -332,7 +332,8 @@ exports.addCallback = function (id, callback, cbEvent) {
   if (CONSTANTS.CB.TYPE.ALL_BIDS_BACK === cbEvent) {
     externalCallbacks.all.push(callback);
   } else if (CONSTANTS.CB.TYPE.AD_UNIT_BIDS_BACK === cbEvent) {
-    externalCallbacks.byAdUnit.push(callback);
+    externalCallbackByAdUnitArr[id] = externalCallbackByAdUnitArr[id] || [];
+    externalCallbackByAdUnitArr[id].push(callback);
   }
 };
 
