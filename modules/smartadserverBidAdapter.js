@@ -86,7 +86,7 @@ export const spec = {
       }
       if (videoMediaType && videoMediaType.context === 'instream') {
         // Specific attributes for instream.
-        var playerSize = videoMediaType.playerSize[0];
+        let playerSize = videoMediaType.playerSize[0];
         payload.isVideo = true;
         payload.videoData = {
           videoProtocol: bid.mediaTypes.video.protocol,
