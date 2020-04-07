@@ -74,24 +74,26 @@ export const spec = {
       };
 
       const videoMediaType = utils.deepAccess(bid, 'mediaTypes.video');
-      if (!videoMediaType) {
-        const bannerMediaType = utils.deepAccess(bid, 'mediaTypes.banner');
+      const bannerMediaType = utils.deepAccess(bid, 'mediaTypes.banner');
+      if (!videoMediaType && !bannerMediaType) {
+        return;
+      }
+      if (bannerMediaType) {
         payload.sizes = bannerMediaType.sizes.map(size => ({
           w: size[0],
           h: size[1]
         }));
-      } else if (videoMediaType && videoMediaType.context === 'instream') {
+      }
+      if (videoMediaType && videoMediaType.context === 'instream') {
         // Specific attributes for instream.
-        let playerSize = videoMediaType.playerSize[0];
+        var playerSize = videoMediaType.playerSize[0];
         payload.isVideo = true;
         payload.videoData = {
-          videoProtocol: bid.params.video.protocol,
+          videoProtocol: bid.mediaTypes.video.protocol,
           playerWidth: playerSize[0],
           playerHeight: playerSize[1],
-          adBreak: bid.params.video.startDelay || 0
+          adBreak: bid.mediaTypes.video.startDelay || 0
         };
-      } else {
-        return {};
       }
 
       if (bidderRequest && bidderRequest.gdprConsent) {
